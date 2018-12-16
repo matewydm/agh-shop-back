@@ -1,6 +1,5 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var fs = require("fs");
 var router = express.Router();
 
 var Schema = mongoose.Schema;
@@ -66,7 +65,29 @@ router.put('/', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    Product.find(function(err, products) {
+    var filter = {};
+    var name = req.query.name;
+    if (name !== null && typeof name !== typeof undefined) {
+        filter['name'] = { "$regex": name, "$options": "i" } ;
+    }
+    var categories = req.query.categories;
+    if (categories && categories.split('').length > 0) {
+        filter['category'] = { $in: categories.split(',') };
+    }
+    // var limit = req.query.limit;
+    // if (limit && typeof limit !== 'undefined') {
+    //     filter['limit'] = limit;
+    // }
+    // var startIndex = req.query.startIndex;
+    // if (startIndex && typeof startIndex !== 'undefined') {
+    //     filter['startIndex'] = startIndex;
+    // }
+    // var endIndex = req.query.endIndex;
+    // if (endIndex && typeof endIndex !== 'undefined') {
+    //     filter['endIndex'] = endIndex;
+    // }
+    console.log(filter);
+    Product.find(filter, function(err, products) {
         if (err) throw err;
         for (var i = 0; i < products.length; i++) {
             var product = products[i];
