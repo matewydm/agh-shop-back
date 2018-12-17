@@ -44,9 +44,9 @@ router.put('/', function (req, res) {
     console.log(req.body);
     var id = req.body._id;
     order = req.body;
-    Order.update( {_id: id} ,
+    Order.findOneAndUpdate( {_id: id} ,
         order,
-        {multi: false},
+        {upsert: true},
         function(err, rows_updated) {
             if (err) throw err;
             console.log('Uaktualniono zamówienie.', rows_updated);
