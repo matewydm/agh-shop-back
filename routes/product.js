@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var router = express.Router();
+const app = require('../app');
 
 var Schema = mongoose.Schema;
 var Promotions = new Schema({
@@ -51,7 +52,8 @@ router.put('/', function (req, res) {
     product.amount = req.body.amount;
     product.promotion = req.body.promotion;
     if (product.promotion) {
-        product.promotion.expirationDate = new Date (req.body.promotion.expirationDate)
+        product.promotion.expirationDate = new Date (req.body.promotion.expirationDate);
+        app.emit("Sprawdź promocję na " + product.name + ", teraz -" + product.promotion.percentage + "%");
     }
     Product.findOneAndUpdate( {_id: id} ,
         product,

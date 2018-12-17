@@ -10,11 +10,15 @@ var productRouter = require('./routes/product');
 var orderRouter = require('./routes/order');
 var usersRouter = require('./routes/users');
 
+var app = express();
+var socket = express();
+var server = require('http').createServer(socket);
+var io = require('socket.io')(server);
+
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://shop-user:aghshop123@ds121652.mlab.com:21652/agh-shop');
 var db = mongoose.connection;
 
-var app = express();
+mongoose.connect('mongodb://shop-user:aghshop123@ds121652.mlab.com:21652/agh-shop');
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -59,6 +63,19 @@ app.use(function(err, req, res, next) {
 db.on('error', console.error.bind(console, 'błąd połączenia...'));
 db.once('open', function() {
 // połączenie udane!
+});
+
+io.on('connection', function() {
+    console.log('Client connected...');
+});
+
+module.exports.emit = function (msg) {
+    console.log('Emiting info...' + msg);
+    io.emit("message", { content : msg });
+};
+
+server.listen(5000, function(){
+    console.log('Node server listening on port 5000');
 });
 
 module.exports = app;
