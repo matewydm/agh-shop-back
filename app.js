@@ -69,9 +69,13 @@ io.on('connection', function() {
     console.log('Client connected...');
 });
 
-module.exports.emit = function (msg) {
+module.exports.promotion = function (msg) {
     console.log('Emiting info...' + msg);
-    io.emit("message", { content : msg });
+    io.emit("promotion", { content : msg });
+};
+module.exports.productEdit = function (msg) {
+    console.log('Emiting info...' + msg);
+    io.emit("productEdit", { content : msg });
 };
 
 server.listen(5000, function(){

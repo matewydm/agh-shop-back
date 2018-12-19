@@ -1,44 +1,9 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var router = express.Router();
 
-var Schema = mongoose.Schema;
-var Promotions = new Schema({
-    percentage: Number,
-    expirationDate: Date
-});
-var Products = new Schema({
-    _id: String,
-    name: String,
-    link: String,
-    price: Number,
-    category: String,
-    description: String,
-    amount: Number,
-    promotion: Promotions
-});
-var BasketProducts = new Schema({
-    amount: Number,
-    product: Products
-});
-var OrderProducts = new Schema({
-    isRealised: Boolean,
-    orderItem: BasketProducts
-});
-var Orders = new Schema({
-    _id: String,
-    items: [OrderProducts],
-    userId: String,
-    email: String,
-    username: String,
-    address: String,
-    price: Number,
-    status: String
-});
-mongoose.model('order', Orders);
-var Order = mongoose.model('order');
+const Order = require('../model/order');
+const Product = require('../model/product');
 var order = new Order();
-const Product = mongoose.model('product');
 
 router.put('/', function (req, res) {
     console.log(req.body);
